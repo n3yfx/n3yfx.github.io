@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>n3yfx_ | ffmpeg 120fps frame renderer</title>
+    <title>N3YFX_ | FFmpeg 120fps</title>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         * {
             box-sizing: border-box;
@@ -17,68 +18,42 @@
             background-color: #050505;
             color: #b3b3b3;
             font-family: 'Inter', sans-serif;
-            padding: 3rem 5rem;
-            min-height: 100vh;
-        }
-
-        header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-bottom: 1px solid #141414;
-            padding-bottom: 1.5rem;
-            margin-bottom: 3rem;
+            min-height: 100vh;
+            padding: 2rem;
         }
 
-        .logo {
-            color: #ffffff;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-
-        .back-btn {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            transition: color 0.2s;
-        }
-
-        .back-btn:hover {
-            color: #fff;
-        }
-
-        .tool-container {
-            max-width: 600px;
-            margin: 0 auto;
+        .container {
             background: #0a0a0a;
             border: 1px solid #161616;
             padding: 3rem;
-            border-radius: 6px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
         }
 
-        .project-num {
+        .meta {
             font-size: 0.7rem;
             color: #444;
             letter-spacing: 2px;
             font-weight: 700;
-            margin-bottom: 0.5rem;
             text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
 
         h1 {
             color: #fff;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            letter-spacing: -0.5px;
         }
 
-        p {
-            color: #888;
-            font-size: 0.95rem;
+        .desc {
+            color: #666;
+            font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 2rem;
         }
@@ -89,169 +64,147 @@
             margin-bottom: 1.5rem;
         }
 
-        .fps-option {
+        .fps-btn {
             flex: 1;
             background: #050505;
-            border: 1px solid #161616;
+            border: 1px solid #222;
             color: #666;
             padding: 0.75rem;
-            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
             font-weight: 600;
             font-size: 0.85rem;
-            cursor: pointer;
-            border-radius: 4px;
             transition: all 0.2s;
         }
 
-        .fps-option.active {
+        .fps-btn.active {
             border-color: #fff;
             color: #fff;
-            background: #111;
         }
 
         .drop-zone {
             border: 2px dashed #222;
-            padding: 3rem 2rem;
+            padding: 2.5rem 1.5rem;
             text-align: center;
-            margin-bottom: 1.5rem;
             background: #050505;
             cursor: pointer;
-            color: #666;
+            color: #555;
             font-size: 0.85rem;
-            transition: border-color 0.2s, color 0.2s;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
         }
 
         .drop-zone:hover {
             border-color: #444;
-            color: #888;
+            color: #aaa;
         }
 
-        .btn-action {
+        .target-status {
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            display: none;
+        }
+
+        .process-btn {
+            width: 100%;
             background: #fff;
             color: #000;
             border: none;
-            padding: 0.75rem 1rem;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-radius: 2px;
-            width: 100%;
+            padding: 1rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.3;
-            pointer-events: none;
-            transition: opacity 0.2s;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-action.ready {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        #file-status {
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 0.85rem;
-            color: #fff;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            text-align: center;
+            margin-bottom: 2rem;
+            transition: opacity 0.2s;
         }
 
-        .output-box {
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .console-box {
             background: #050505;
             border: 1px solid #161616;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: 4px;
-            display: none;
-            margin-top: 1.5rem;
         }
 
-        .output-box h3 {
-            color: #fff;
-            font-size: 0.85rem;
+        .console-title {
+            font-size: 0.7rem;
+            color: #444;
+            font-weight: 700;
+            text-transform: uppercase;
             margin-bottom: 0.75rem;
             letter-spacing: 1px;
-            text-transform: uppercase;
         }
 
-        .command-text {
+        .console-log {
             font-family: monospace;
+            font-size: 0.8rem;
             color: #00ff00;
-            font-size: 0.85rem;
-            background: #000;
-            padding: 0.75rem;
-            border-radius: 2px;
             word-break: break-all;
-            border: 1px solid #111;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 2rem;
-            }
-            .tool-container {
-                padding: 1.5rem;
-            }
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="../" class="logo">N3YFX_</a>
-        <a href="../" class="back-btn">← back to deploys</a>
-    </header>
-
-    <main class="tool-container">
-        <div class="project-num">engine_core_01</div>
+    <div class="container">
+        <div class="meta">Engine_Core_01</div>
         <h1>ffmpeg 120fps interpolator</h1>
-        <p>modify how tiktok reads your timing profiles to completely neutralize server compression scales.</p>
-        
+        <div class="desc">modify how tiktok reads your timing profiles to completely neutralize server compression scales.</div>
+
         <div class="fps-selector">
-            <div class="fps-option active" data-fps="60">60 fps base</div>
-            <div class="fps-option" data-fps="120">120 fps base</div>
+            <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
+            <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
         </div>
 
-        <div class="drop-zone" id="render-drop-zone">
+        <div class="drop-zone" id="drop-zone">
             drag & drop target edit file here or click to select
-            <input type="file" id="render-file-input" accept="video/*" style="display: none;">
+            <input type="file" id="file-input" accept="video/*" style="display: none;">
         </div>
 
-        <div id="file-status"></div>
-        
-        <button class="btn-action" id="render-btn">generate terminal sequence</button>
+        <div class="target-status" id="target-status"></div>
 
-        <div class="output-box" id="cmd-output-box">
-            <h3>generated terminal command</h3>
-            <div class="command-text" id="cmd-string"></div>
+        <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
+
+        <div class="console-box">
+            <div class="console-title">Generated Terminal Command</div>
+            <div class="console-log" id="console-log">awaiting asset upload initialization...</div>
         </div>
-    </main>
+    </div>
 
     <script>
-        const dropZone = document.getElementById('render-drop-zone');
-        const fileInput = document.getElementById('render-file-input');
-        const renderBtn = document.getElementById('render-btn');
-        const fileStatus = document.getElementById('file-status');
-        const fpsOptions = document.querySelectorAll('.fps-option');
-        const cmdOutputBox = document.getElementById('cmd-output-box');
-        const cmdString = document.getElementById('cmd-string');
-        
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
+
         let loadedFile = null;
         let selectedFps = '60';
 
-        fpsOptions.forEach(opt => {
-            opt.addEventListener('click', () => {
-                fpsOptions.forEach(o => o.classList.remove('active'));
-                opt.classList.add('active');
-                selectedFps = opt.getAttribute('data-fps');
-                if (loadedFile) updateCommandText();
-            });
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const targetStatus = document.getElementById('target-status');
+        const renderBtn = document.getElementById('render-btn');
+        const consoleLog = document.getElementById('console-log');
+
+        // handle logs straight from the webassembly thread
+        ffmpeg.setLogger(({ type, message }) => {
+            consoleLog.textContent = `[ffmpeg.${type}] ${message}`;
         });
 
         dropZone.addEventListener('click', () => fileInput.click());
 
         fileInput.addEventListener('change', (e) => {
-            handleUploadedFile(e.target.files[0]);
+            handleFile(e.target.files[0]);
         });
 
         dropZone.addEventListener('dragover', (e) => {
@@ -266,40 +219,73 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.style.borderColor = '#222';
-            handleUploadedFile(e.dataTransfer.files[0]);
+            handleFile(e.dataTransfer.files[0]);
         });
 
-        function handleUploadedFile(file) {
-            if (file && file.type.startsWith('video/')) {
-                loadedFile = file;
-                fileStatus.textContent = `TARGET ACQUIRED: ${file.name}`;
-                renderBtn.classList.add('ready');
-                cmdOutputBox.style.display = 'none';
-            } else {
-                fileStatus.textContent = 'invalid asset container format, bradar.';
-                renderBtn.classList.remove('ready');
-                cmdOutputBox.style.display = 'none';
-            }
+        function handleFile(file) {
+            if (!file) return;
+            loadedFile = file;
+            targetStatus.textContent = `TARGET ACQUIRED: ${file.name.toUpperCase()}`;
+            targetStatus.style.display = 'block';
+            renderBtn.removeAttribute('disabled');
+            updateCommandPreview();
         }
 
-        function updateCommandText() {
-            const scale = selectedFps === '60' ? '2' : '6';
-            cmdString.textContent = `ffmpeg -itsscale ${scale} -i ${loadedFile.name} -c:v copy -c:a copy output.mp4`;
+        function setFps(fps) {
+            selectedFps = fps;
+            document.querySelectorAll('.fps-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(fps));
+            });
+            updateCommandPreview();
         }
 
-        renderBtn.addEventListener('click', () => {
+        function updateCommandPreview() {
             if (!loadedFile) return;
-            renderBtn.textContent = 'compiling vector scales...';
-            renderBtn.style.opacity = '0.5';
-            renderBtn.style.pointerEvents = 'none';
+            const scale = selectedFps === '60' ? '2' : '6';
+            consoleLog.textContent = `ffmpeg -itsscale ${scale} -i ${loadedFile.name} -c:v copy -c:a copy output.mp4`;
+        }
 
-            setTimeout(() => {
-                updateCommandText();
-                cmdOutputBox.style.display = 'block';
-                renderBtn.textContent = 'generate terminal sequence';
-                renderBtn.style.opacity = '1';
-                renderBtn.style.pointerEvents = 'auto';
-            }, 1200);
+        renderBtn.addEventListener('click', async () => {
+            if (!loadedFile) return;
+
+            renderBtn.setAttribute('disabled', 'true');
+            renderBtn.textContent = 'initializing core...';
+
+            try {
+                if (!ffmpeg.isLoaded()) {
+                    await ffmpeg.load();
+                }
+
+                renderBtn.textContent = 'mounting storage...';
+                ffmpeg.FS('writeFile', loadedFile.name, await fetchFile(loadedFile));
+
+                const scale = selectedFps === '60' ? '2' : '6';
+                renderBtn.textContent = 'compiling frame vector scales...';
+
+                // execute actual webassembly command context
+                await ffmpeg.run('-itsscale', scale, '-i', loadedFile.name, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
+
+                renderBtn.textContent = 'extracting pipeline binary...';
+                const data = ffmpeg.FS('readFile', 'output.mp4');
+
+                // deploy download interface
+                const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `optimized_${selectedFps}fps_${loadedFile.name}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                renderBtn.textContent = 'sequence generated';
+                consoleLog.textContent = 'process finished successfully. pipeline clear.';
+            } catch (err) {
+                console.error(err);
+                consoleLog.textContent = `error: ${err.message}`;
+                renderBtn.textContent = 'pipeline failed';
+            } finally {
+                renderBtn.removeAttribute('disabled');
+            }
         });
     </script>
 </body>
