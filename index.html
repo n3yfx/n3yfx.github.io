@@ -7,153 +7,23 @@
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #050505;
-            color: #b3b3b3;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            background: #0a0a0a;
-            border: 1px solid #161616;
-            padding: 3rem;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .meta {
-            font-size: 0.7rem;
-            color: #444;
-            letter-spacing: 2px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        h1 {
-            color: #fff;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .desc {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .fps-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .fps-btn {
-            flex: 1;
-            background: #050505;
-            border: 1px solid #222;
-            color: #666;
-            padding: 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .fps-btn.active {
-            border-color: #fff;
-            color: #fff;
-        }
-
-        .drop-zone {
-            border: 2px dashed #222;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-            background: #050505;
-            cursor: pointer;
-            color: #555;
-            font-size: 0.85rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .drop-zone:hover {
-            border-color: #444;
-            color: #aaa;
-        }
-
-        .target-status {
-            font-size: 0.75rem;
-            color: #fff;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
-            display: none;
-        }
-
-        .process-btn {
-            width: 100%;
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-bottom: 2rem;
-            transition: opacity 0.2s;
-        }
-
-        .process-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .console-box {
-            background: #050505;
-            border: 1px solid #161616;
-            padding: 1.25rem;
-            border-radius: 4px;
-        }
-
-        .console-title {
-            font-size: 0.7rem;
-            color: #444;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-            letter-spacing: 1px;
-        }
-
-        .console-log {
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: #00ff00;
-            word-break: break-all;
-            line-height: 1.5;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #050505; color: #b3b3b3; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 2rem; }
+        .container { background: #0a0a0a; border: 1px solid #161616; padding: 3rem; border-radius: 8px; max-width: 500px; width: 100%; }
+        .meta { font-size: 0.7rem; color: #444; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem; }
+        h1 { color: #fff; font-size: 1.8rem; font-weight: 600; margin-bottom: 1rem; letter-spacing: -0.5px; }
+        .desc { color: #666; font-size: 0.9rem; line-height: 1.6; margin-bottom: 2rem; }
+        .fps-selector { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .fps-btn { flex: 1; background: #050505; border: 1px solid #222; color: #666; padding: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; }
+        .fps-btn.active { border-color: #fff; color: #fff; }
+        .drop-zone { border: 2px dashed #222; padding: 2.5rem 1.5rem; text-align: center; background: #050505; cursor: pointer; color: #555; font-size: 0.85rem; border-radius: 4px; margin-bottom: 1.5rem; transition: all 0.2s; }
+        .drop-zone:hover { border-color: #444; color: #aaa; }
+        .target-status { font-size: 0.75rem; color: #fff; font-weight: 700; text-align: center; margin-bottom: 1.5rem; letter-spacing: 1px; display: none; }
+        .process-btn { width: 100%; background: #fff; color: #000; border: none; padding: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; margin-bottom: 2rem; transition: opacity 0.2s; }
+        .process-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .console-box { background: #050505; border: 1px solid #161616; padding: 1.25rem; border-radius: 4px; }
+        .console-title { font-size: 0.7rem; color: #444; font-weight: 700; text-transform: uppercase; margin-bottom: 0.75rem; letter-spacing: 1px; }
+        .console-log { font-family: monospace; font-size: 0.8rem; color: #00ff00; word-break: break-all; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -164,8 +34,8 @@
         <div class="desc">modify how tiktok reads your timing profiles to completely neutralize server compression scales.</div>
 
         <div class="fps-selector">
-            <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
-            <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
+            <button class="fps-btn active" id="btn-60" onclick="setFps('60')">60 fps base</button>
+            <button class="fps-btn" id="btn-120" onclick="setFps('120')">120 fps base</button>
         </div>
 
         <div class="drop-zone" id="drop-zone">
@@ -174,7 +44,6 @@
         </div>
 
         <div class="target-status" id="target-status"></div>
-
         <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
 
         <div class="console-box">
@@ -186,57 +55,43 @@
     <script>
         const { createFFmpeg, fetchFile } = FFmpeg;
         const ffmpeg = createFFmpeg({ log: true });
-
-        let loadedFile = null;
-        let selectedFps = '60';
-
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const targetStatus = document.getElementById('target-status');
-        const renderBtn = document.getElementById('render-btn');
+        let loadedFile = null; let selectedFps = '60';
         const consoleLog = document.getElementById('console-log');
-
-        // handle logs straight from the webassembly thread
-        ffmpeg.setLogger(({ type, message }) => {
-            consoleLog.textContent = `[ffmpeg.${type}] ${message}`;
-        });
-
-        dropZone.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => {
-            handleFile(e.target.files[0]);
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#fff';
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#222';
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#222';
-            handleFile(e.dataTransfer.files[0]);
-        });
-
-        function handleFile(file) {
-            if (!file) return;
-            loadedFile = file;
-            targetStatus.textContent = `TARGET ACQUIRED: ${file.name.toUpperCase()}`;
-            targetStatus.style.display = 'block';
-            renderBtn.removeAttribute('disabled');
-            updateCommandPreview();
-        }
 
         function setFps(fps) {
             selectedFps = fps;
-            document.querySelectorAll('.fps-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.includes(fps));
-            });
+            document.getElementById('btn-60').classList.toggle('active', fps === '60');
+            document.getElementById('btn-120').classList.toggle('active', fps === '120');
             updateCommandPreview();
         }
 
-        function update
+        function updateCommandPreview() {
+            if (!loadedFile) return;
+            const scale = selectedFps === '60' ? '2' : '6';
+            consoleLog.textContent = `ffmpeg -itsscale ${scale} -i ${loadedFile.name} -c:v copy -c:a copy output.mp4`;
+        }
+
+        document.getElementById('drop-zone').onclick = () => document.getElementById('file-input').click();
+        document.getElementById('file-input').onchange = (e) => {
+            loadedFile = e.target.files[0];
+            document.getElementById('target-status').textContent = `TARGET ACQUIRED: ${loadedFile.name.toUpperCase()}`;
+            document.getElementById('target-status').style.display = 'block';
+            document.getElementById('render-btn').disabled = false;
+            updateCommandPreview();
+        };
+
+        document.getElementById('render-btn').onclick = async () => {
+            const btn = document.getElementById('render-btn');
+            btn.disabled = true; btn.textContent = 'processing...';
+            if (!ffmpeg.isLoaded()) await ffmpeg.load();
+            ffmpeg.FS('writeFile', loadedFile.name, await fetchFile(loadedFile));
+            const scale = selectedFps === '60' ? '2' : '6';
+            await ffmpeg.run('-itsscale', scale, '-i', loadedFile.name, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
+            const data = ffmpeg.FS('readFile', 'output.mp4');
+            const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+            const a = document.createElement('a'); a.href = url; a.download = `optimized_${loadedFile.name}`; a.click();
+            btn.textContent = 'done';
+        };
+    </script>
+</body>
+</html>
