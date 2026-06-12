@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>fecking ffmpeg fix</title>
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
-</head>
-<body>
-  <h1>fixing your fecking code, finally</h1>
-  <script>
-    const { createFFmpeg } = FFmpeg;
+  <head>
+    <title>fecking ffmpeg test</title>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+  </head>
+  <body>
+    <h1>upload a fecking video</h1>
+    <input type="file" id="uploader">
     
-    // this is the only way you're getting past the fecking proxy_main error
-    const ffmpeg = createFFmpeg({ 
-      log: true,
-      corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
-    });
+    <script>
+      const { createFFmpeg, fetchFile } = FFmpeg;
+      
+      const ffmpeg = createFFmpeg({ 
+        log: true,
+        corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
+      });
 
-    (async () => {
-      console.log('loading fecking ffmpeg...');
-      await ffmpeg.load();
-      console.log('fecking loaded, finally.');
-    })();
-  </script>
-</body>
+      document.getElementById('uploader').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        console.log('loading the fecking ffmpeg...');
+        
+        await ffmpeg.load();
+        
+        console.log('writing fecking file...');
+        ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(file));
+        
+        console.log('starting fecking transcode...');
+        await ffmpeg.run('-i', 'input.mp4', 'output.webm');
+        
+        console.log('fecking done!');
+        const data = ffmpeg.FS('readFile', 'output.webm');
+        console.log('output file ready:', data);
+      });
+    </script>
+  </body>
 </html>
