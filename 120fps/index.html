@@ -94,6 +94,13 @@
             
             await ffmpeg.run('-itsscale', '2', '-i', fileName, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
             
+            const data = ffmpeg.FS('readFile', 'output.mp4');
+            const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'output.mp4';
+            a.click();
+            
             cmdText.innerText = `ffmpeg -itsscale 2 -i ${fileName} -c:v copy -c:a copy output.mp4`;
             cmdBox.style.display = 'block';
             genBtn.innerText = "sequence generated";
