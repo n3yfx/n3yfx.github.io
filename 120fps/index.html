@@ -2,29 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ENGINE_CORE_01</title>
+    <title>engine_core_01</title>
+    <script src="coi-serviceworker.js"></script>
     <style>
-        body { background: #0c0c0c; color: #fff; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; }
-        .wrapper { width: 400px; }
-        .engine { font-size: 0.65rem; color: #555; text-transform: uppercase; letter-spacing: 2px; }
-        h1 { font-size: 1.6rem; margin: 10px 0; font-weight: 700; }
-        p { font-size: 0.9rem; color: #aaa; margin-bottom: 30px; }
-        .btn-group { display: flex; gap: 10px; margin-bottom: 25px; }
-        .btn-mode { flex: 1; padding: 12px; border: 1px solid #333; background: #0c0c0c; color: #fff; cursor: pointer; transition: 0.2s; }
-        .btn-mode:hover { border-color: #666; }
-        .drop-zone { border: 2px dashed #333; padding: 40px; text-align: center; cursor: pointer; color: #666; margin-bottom: 20px; transition: 0.2s; }
+        body { 
+            background: #0c0c0c; 
+            color: #fff; 
+            font-family: 'inter', -apple-system, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            padding-top: 80px; 
+            margin: 0; 
+        }
+        .wrapper { width: 500px; padding: 20px; }
+        .engine { font-size: 0.9rem; color: #777; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
+        h1 { font-size: 2.2rem; margin: 0 0 10px 0; font-weight: 800; line-height: 1.1; }
+        p { font-size: 1.1rem; color: #aaa; margin-bottom: 40px; line-height: 1.5; }
+        .btn-group { display: flex; gap: 15px; margin-bottom: 30px; }
+        .btn-mode { flex: 1; padding: 18px; border: 1px solid #333; background: #111; color: #fff; cursor: pointer; font-size: 1rem; font-weight: 600; }
+        .drop-zone { border: 2px dashed #444; padding: 60px 20px; text-align: center; cursor: pointer; color: #888; margin-bottom: 30px; font-size: 1.1rem; transition: 0.2s; }
         .drop-zone:hover { border-color: #fff; color: #fff; }
-        .target-label { color: #fff; font-weight: bold; margin-bottom: 20px; text-align: center; font-size: 0.9rem; }
-        #genBtn { width: 100%; padding: 16px; background: #fff; color: #000; border: none; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        .target-label { color: #fff; font-weight: bold; margin-bottom: 30px; text-align: center; font-size: 1.2rem; }
+        #genBtn { width: 100%; padding: 20px; background: #fff; color: #000; border: none; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
         #genBtn:disabled { background: #333; color: #666; cursor: not-allowed; }
-        .cmd-box { border: 1px solid #333; padding: 20px; margin-top: 30px; background: #111; color: #0f0; font-family: 'Courier New', monospace; display: none; }
-        .cmd-title { font-size: 0.7rem; color: #666; margin-bottom: 10px; }
+        .cmd-box { border: 1px solid #333; padding: 25px; margin-top: 40px; background: #111; color: #0f0; font-family: 'courier new', monospace; display: none; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
-    <div class="engine">ENGINE_CORE_01</div>
+    <div class="engine">engine_core_01</div>
     <h1>ffmpeg 120fps interpolator</h1>
     <p>modify how tiktok reads your timing profiles to completely neutralize server compression scales.</p>
 
@@ -40,10 +47,10 @@
 
     <div class="target-label" id="targetLabel"></div>
 
-    <button id="genBtn">GENERATE TERMINAL SEQUENCE</button>
+    <button id="genBtn">generate terminal sequence</button>
 
     <div class="cmd-box" id="cmdBox">
-        <div class="cmd-title">GENERATED TERMINAL COMMAND</div>
+        <div style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">generated terminal command</div>
         <div id="cmdText"></div>
     </div>
 </div>
@@ -57,14 +64,11 @@
     const cmdBox = document.getElementById('cmdBox');
     const cmdText = document.getElementById('cmdText');
 
-    const ffmpeg = createFFmpeg({ 
-        log: true, 
-        corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js' 
-    });
+    const ffmpeg = createFFmpeg({ log: true });
 
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
-            targetLabel.innerText = "TARGET ACQUIRED: " + e.target.files[0].name;
+            targetLabel.innerText = "target acquired: " + e.target.files[0].name;
         }
     });
 
@@ -74,71 +78,27 @@
             return;
         }
 
-        // Lock button immediately
         genBtn.disabled = true;
-        genBtn.innerText = "PROCESSING...";
+        genBtn.innerText = "processing...";
         
         try {
-            await ffmpeg.load();
+            if (!ffmpeg.isLoaded()) {
+                await ffmpeg.load();
+            }
+            
             const fileName = fileInput.files[0].name;
             ffmpeg.FS('writeFile', fileName, await fetchFile(fileInput.files[0]));
             
-            // Run the command
             await ffmpeg.run('-itsscale', '2', '-i', fileName, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
             
-            // Show the result
             cmdText.innerText = `ffmpeg -itsscale 2 -i ${fileName} -c:v copy -c:a copy output.mp4`;
             cmdBox.style.display = 'block';
-            genBtn.innerText = "SEQUENCE GENERATED";
+            genBtn.innerText = "sequence generated";
         } catch (err) {
             console.error(err);
             genBtn.disabled = false;
-            genBtn.innerText = "FAILED - TRY AGAIN";
+            genBtn.innerText = "failed - try again";
         }
-    });
-</script>
-
-</body>
-</html>
-    <input type="file" id="fileInput" hidden>
-
-    <!-- fecking target label -->
-    <div class="target-label" id="targetLabel"></div>
-
-    <!-- fecking generate button -->
-    <button id="genBtn">GENERATE TERMINAL SEQUENCE</button>
-
-    <!-- fecking terminal output -->
-    <div class="cmd-box" id="cmdBox" style="display:none;">
-        GENERATED TERMINAL COMMAND
-        <p id="cmdText"></p>
-    </div>
-</div>
-
-<script>
-    const fileInput = document.getElementById('fileInput');
-    const targetLabel = document.getElementById('targetLabel');
-    const genBtn = document.getElementById('genBtn');
-    const cmdBox = document.getElementById('cmdBox');
-    const cmdText = document.getElementById('cmdText');
-
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            // fecking update the target label
-            targetLabel.innerText = "TARGET ACQUIRED: " + e.target.files[0].name;
-        }
-    });
-
-    genBtn.addEventListener('click', () => {
-        if (!fileInput.files[0]) return;
-        
-        // fecking disable button after one click
-        genBtn.disabled = true;
-        
-        // fecking generate command
-        const fileName = fileInput.files[0].name;
-        cmdText.innerText = `ffmpeg -itsscale 2 -i ${fileName} -c:v copy -c:a copy output.mp4`;
-        cmdBox.style.display = 'block';
     });
 </script>
 
