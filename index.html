@@ -7,46 +7,55 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        header { position: fixed; top: 0; width: 100%; padding: 2rem; display: flex; justify-content: flex-end; gap: 2rem; background: rgba(5,5,5,0.9); z-index: 100; }
-        header a { color: #666; text-decoration: none; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: color 0.3s; }
-        header a.active { color: #fff; }
-        section { min-height: 100vh; padding: 150px 2rem; display: flex; flex-direction: column; align-items: center; max-width: 900px; margin: 0 auto; }
-        h1 { font-size: 1.5rem; margin-bottom: 3rem; letter-spacing: 1px; }
-        p { color: #888; line-height: 1.6; text-align: center; max-width: 600px; }
         
-        .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
-        .card { background: #0a0a0a; padding: 2rem; border: 1px solid #161616; border-radius: 8px; }
-        .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
-        .card p { font-size: 0.8rem; text-align: left; margin-bottom: 1rem; }
-        .card a { color: #fff; text-decoration: none; font-size: 0.8rem; border-bottom: 1px solid #fff; }
+        header { position: fixed; top: 0; width: 100%; padding: 2rem; display: flex; justify-content: flex-end; gap: 2rem; background: rgba(5,5,5,0.95); z-index: 100; }
+        header a { color: #666; text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; transition: color 0.3s; }
+        header a.active { color: #fff; }
 
-        .social-grid { display: flex; gap: 2rem; }
-        .social-grid a { color: #666; text-decoration: none; font-weight: 600; }
-        .social-grid a:hover { color: #fff; }
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 2rem; max-width: 900px; margin: 0 auto; }
+        
+        h1 { font-size: 2rem; margin-bottom: 1.5rem; letter-spacing: -1px; }
+        p { color: #888; line-height: 1.6; text-align: center; max-width: 600px; font-size: 0.9rem; }
+
+        .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-top: 3rem; }
+        .card { background: #0a0a0a; padding: 2rem; border: 1px solid #161616; border-radius: 8px; }
+        .card h3 { font-size: 1rem; margin-bottom: 0.8rem; color: #fff; }
+        .card p { font-size: 0.8rem; text-align: left; margin-bottom: 1.5rem; color: #666; }
+        .card a { color: #fff; text-decoration: none; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; border-bottom: 1px solid #fff; }
+
+        .social-links { display: flex; gap: 2rem; margin-top: 2rem; }
+        .social-links a { color: #666; text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: color 0.3s; }
+        .social-links a:hover { color: #fff; }
     </style>
 </head>
 <body>
 
-<header id="nav">
+<header>
     <a href="#about" class="nav-link active">About</a>
     <a href="#work" class="nav-link">Work</a>
     <a href="#socials" class="nav-link">Socials</a>
 </header>
 
 <section id="about">
-    <h1>Production Deploys</h1>
-    <p>We have officially launched the N3YFX_ Production Hub, a dedicated web-based ecosystem for football editors to optimize their workflow and bypass algorithmic compression. No local installations. No unnecessary setup. Just raw, high-performance editing tools built for elite quality.</p>
+    <div style="text-align: center;">
+        <p style="font-size: 0.7rem; letter-spacing: 2px; color: #444; margin-bottom: 1rem;">SYSTEM_INIT</p>
+        <h1>Production Deploys</h1>
+        <p>We have officially launched the N3YFX_ Production Hub, a dedicated web-based ecosystem for football editors to optimize their workflow and bypass algorithmic compression. No local installations. No unnecessary setup. Just raw, high-performance editing tools built for elite quality.</p>
+    </div>
 </section>
 
 <section id="work">
+    <p style="font-size: 0.7rem; letter-spacing: 2px; color: #444; margin-bottom: 1rem;">SELECTED_WORK</p>
     <h1>Engine Deployments</h1>
     <div class="work-grid">
         <div class="card">
+            <p style="font-size: 0.6rem; color: #333; text-align: left; margin-bottom: 0.5rem;">PROJECT_01</p>
             <h3>FFmpeg 120fps</h3>
             <p>High-performance video delivery optimization tool. Eliminates social media frame drops entirely.</p>
             <a href="120fps/">Launch Interpolator Vector ↗</a>
         </div>
         <div class="card">
+            <p style="font-size: 0.6rem; color: #333; text-align: left; margin-bottom: 0.5rem;">PROJECT_02</p>
             <h3>TikTok Check</h3>
             <p>Inspect resolution metadata and compression tiers.</p>
         </div>
@@ -55,7 +64,7 @@
 
 <section id="socials">
     <h1>Socials</h1>
-    <div class="social-grid">
+    <div class="social-links">
         <a href="https://t.me/n3yfx" target="_blank">Telegram</a>
         <a href="https://www.tiktok.com/@n3yfx__" target="_blank">TikTok</a>
         <a href="https://discord.gg/FtYqHmNngc" target="_blank">Discord</a>
