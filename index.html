@@ -2,23 +2,226 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>N3YFX_ | HUB</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; padding: 2rem; }
-        header { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 4rem auto; }
-        .logo { font-weight: 700; letter-spacing: 2px; }
-        nav { display: flex; gap: 2rem; }
-        .nav-link { cursor: pointer; color: #666; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: 0.2s; }
-        .nav-link:hover { color: #fff; }
-        .content { max-width: 1000px; margin: 0 auto; display: none; }
-        .content.active { display: block; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .card { border: 1px solid #161616; padding: 2rem; background: #0a0a0a; border-radius: 4px; }
-        .card h2 { margin-bottom: 1rem; }
-        .card p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
-        .checker-box { background: #050505; border: 1px dashed #333; padding: 1rem; text-align: center; cursor: pointer; }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: #050505;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Fixed Navigation Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #141414;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #444;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        /* Scroll spy active state */
+        nav a.active {
+            color: #fff;
+        }
+
+        /* Full Page Sections */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 2rem 2rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .desc-text {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Work Grid styling matching your screenshot */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .card {
+            border: 1px solid #111;
+            padding: 2.5rem;
+            background: #090909;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+
+        .card-meta {
+            font-size: 0.65rem;
+            color: #444;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .card h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: #111;
+            color: #aaa;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        .launch-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Interactive Dimensions Checker Inside Card */
+        .checker-zone {
+            border: 1px dashed #222;
+            padding: 1.5rem;
+            text-align: center;
+            background: #050505;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #444;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .checker-zone:hover {
+            border-color: #444;
+            color: #aaa;
+        }
+
+        #result {
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Social Links Grid with Icons */
+        .socials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 2rem;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #090909;
+            border: 1px solid #111;
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            color: #aaa;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .social-button:hover {
+            border-color: #fff;
+            color: #fff;
+            background: #111;
+        }
+
+        .social-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
     </style>
 </head>
 <body>
@@ -26,57 +229,65 @@
 <header>
     <div class="logo">N3YFX_</div>
     <nav>
-        <div class="nav-link" onclick="showTab('about')">About</div>
-        <div class="nav-link" onclick="showTab('work')">Work</div>
-        <div class="nav-link" onclick="showTab('socials')">Socials</div>
+        <a href="#about" class="nav-link active">About</a>
+        <a href="#work" class="nav-link">Work</a>
+        <a href="#socials" class="nav-link">Socials</a>
     </nav>
 </header>
 
-<div id="about" class="content active">
-    <h1>Production Hub</h1>
-    <p style="color: #666; margin-top: 1rem;">We have officially launched the N3YFX_ Production Hub, a dedicated web-based ecosystem for football editors to optimize their workflow and bypass algorithmic compression. No local installations. No unnecessary setup. Just raw, high-performance editing tools.</p>
-</div>
+<section id="about">
+    <div class="card-meta">System_Introduction</div>
+    <h1>Production Deploys</h1>
+    <div class="desc-text">
+        We have officially launched the N3YFX_ Production Hub, a dedicated web-based ecosystem for football editors to optimize their workflow and bypass algorithmic compression. No local installations. No unnecessary setup. Just raw, high-performance editing tools built for elite quality.
+    </div>
+</section>
 
-<div id="work" class="content">
+<section id="work">
+    <div class="card-meta">Selected_Work</div>
+    <h1>Engine Deployments</h1>
     <div class="grid">
         <div class="card">
-            <h2>FFmpeg 120fps</h2>
-            <p>High-performance video delivery optimization tool. Eliminates social media frame drops entirely.</p>
-            <a href="120fps/" style="color: #fff; text-decoration: none;">Launch Engine →</a>
-        </div>
-        <div class="card">
-            <h2>TikTok Check</h2>
-            <p>Drop your file to instantly inspect resolution metadata and check if it triggers compression tiers.</p>
-            <div class="checker-box" onclick="document.getElementById('file-input').click()">
-                <input type="file" id="file-input" style="display: none;" onchange="checkVideo(this)">
-                Drop file here
+            <div>
+                <div class="card-meta">Project_01</div>
+                <h2>FFmpeg 120fps</h2>
+                <p>High-performance video delivery optimization tool for crisp playback. Eliminates social media frame drops entirely.</p>
+                <div class="tag-row">
+                    <span class="tag">FFMPEG</span>
+                    <span class="tag">CLI</span>
+                </div>
             </div>
-            <div id="result" style="margin-top: 1rem; font-size: 0.8rem;"></div>
+            <a href="120fps/" class="launch-btn">Launch Interpolator Vector ↗</a>
+        </div>
+
+        <div class="card">
+            <div>
+                <div class="card-meta">Project_02</div>
+                <h2>TikTok Check</h2>
+                <p>Drop your file to instantly inspect resolution metadata and check if it triggers compression tiers.</p>
+                <div class="tag-row">
+                    <span class="tag">ANALYTICS</span>
+                    <span class="tag">METADATA</span>
+                </div>
+                <div class="checker-zone" onclick="document.getElementById('file-input').click()">
+                    <input type="file" id="file-input" style="display: none;" onchange="checkVideoMetadata(this)">
+                    drag & drop clip here or click to browse
+                </div>
+            </div>
+            <div id="result"></div>
         </div>
     </div>
-</div>
+</section>
 
-<div id="socials" class="content">
-    <h1>Social Links</h1>
-    <p style="margin-top: 1rem;"><a href="#" style="color:#666">Telegram</a></p>
-    <p><a href="#" style="color:#666">Discord</a></p>
-</div>
-
-<script>
-    function showTab(id) {
-        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-    function checkVideo(input) {
-        const file = input.files[0];
-        const video = document.createElement('video');
-        video.src = URL.createObjectURL(file);
-        video.onloadedmetadata = () => {
-            const res = `${video.videoWidth}x${video.videoHeight}`;
-            const status = (video.videoWidth === 1080 && video.videoHeight === 1920) ? "PASS: Optimal Ratio" : "FAIL: Bad Dimensions";
-            document.getElementById('result').innerText = `${res} | ${status}`;
-        };
-    }
-</script>
-</body>
-</html>
+<section id="socials">
+    <div class="card-meta">External_Links</div>
+    <h1>Social Hub</h1>
+    <div class="desc-text">Direct entry links to main content feeds, community spaces, and editing portfolios.</div>
+    
+    <div class="socials-container">
+        <a href="https://t.me/n3yfx" target="_blank" class="social-button">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-1-.65-.35-1 .22-1.62.15-.15 2.7-2.48 2.75-2.7.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-2.04 1.29-5.75 3.79-.54.37-1.03.55-1.47.54-.48-.01-1.4-.27-2.08-.5-.83-.27-1.49-.42-1.43-.88.03-.24.36-.49.99-.74 3.88-1.69 6.47-2.8 7.77-3.32 3.7-1.47 4.46-1.73 4.96-1.74.11 0 .36.03.52.16.14.11.18.26.19.37z"/></svg>
+            Telegram Channel
+        </a>
+        <a href="https://discord.gg/FtYqHmNngc" target="_blank" class="social-button">
+            <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27
