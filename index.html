@@ -4,15 +4,79 @@
     <meta charset="UTF-8">
     <title>N3YFX_ | HUB</title>
     <style>
-        body { background: #050505; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 20px; }
-        .hub-link { color: #aaa; text-decoration: none; border: 1px solid #333; padding: 1rem 2rem; border-radius: 4px; transition: 0.2s; min-width: 200px; text-align: center; }
-        .hub-link:hover { border-color: #fff; color: #fff; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; padding: 2rem; }
+        header { display: flex; justify-content: space-between; align-items: center; max-width: 1000px; margin: 0 auto 4rem auto; }
+        .logo { font-weight: 700; letter-spacing: 2px; }
+        nav { display: flex; gap: 2rem; }
+        .nav-link { cursor: pointer; color: #666; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: 0.2s; }
+        .nav-link:hover { color: #fff; }
+        .content { max-width: 1000px; margin: 0 auto; display: none; }
+        .content.active { display: block; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { border: 1px solid #161616; padding: 2rem; background: #0a0a0a; border-radius: 4px; }
+        .card h2 { margin-bottom: 1rem; }
+        .card p { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+        .checker-box { background: #050505; border: 1px dashed #333; padding: 1rem; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h1>N3YFX_ PRODUCTION HUB</h1>
-    <!-- add new tools here -->
-    <a href="120fps/" class="hub-link">FFmpeg 120fps Interpolator</a>
-    <a href="dimensions/" class="hub-link">TikTok Dimensions Checker</a>
+
+<header>
+    <div class="logo">N3YFX_</div>
+    <nav>
+        <div class="nav-link" onclick="showTab('about')">About</div>
+        <div class="nav-link" onclick="showTab('work')">Work</div>
+        <div class="nav-link" onclick="showTab('socials')">Socials</div>
+    </nav>
+</header>
+
+<div id="about" class="content active">
+    <h1>Production Hub</h1>
+    <p style="color: #666; margin-top: 1rem;">We have officially launched the N3YFX_ Production Hub, a dedicated web-based ecosystem for football editors to optimize their workflow and bypass algorithmic compression. No local installations. No unnecessary setup. Just raw, high-performance editing tools.</p>
+</div>
+
+<div id="work" class="content">
+    <div class="grid">
+        <div class="card">
+            <h2>FFmpeg 120fps</h2>
+            <p>High-performance video delivery optimization tool. Eliminates social media frame drops entirely.</p>
+            <a href="120fps/" style="color: #fff; text-decoration: none;">Launch Engine →</a>
+        </div>
+        <div class="card">
+            <h2>TikTok Check</h2>
+            <p>Drop your file to instantly inspect resolution metadata and check if it triggers compression tiers.</p>
+            <div class="checker-box" onclick="document.getElementById('file-input').click()">
+                <input type="file" id="file-input" style="display: none;" onchange="checkVideo(this)">
+                Drop file here
+            </div>
+            <div id="result" style="margin-top: 1rem; font-size: 0.8rem;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="socials" class="content">
+    <h1>Social Links</h1>
+    <p style="margin-top: 1rem;"><a href="#" style="color:#666">Telegram</a></p>
+    <p><a href="#" style="color:#666">Discord</a></p>
+</div>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+    function checkVideo(input) {
+        const file = input.files[0];
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.onloadedmetadata = () => {
+            const res = `${video.videoWidth}x${video.videoHeight}`;
+            const status = (video.videoWidth === 1080 && video.videoHeight === 1920) ? "PASS: Optimal Ratio" : "FAIL: Bad Dimensions";
+            document.getElementById('result').innerText = `${res} | ${status}`;
+        };
+    }
+</script>
 </body>
 </html>
