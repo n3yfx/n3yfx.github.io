@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>n3yfx_ | Production Deploys</title>
+    <title>n3yfx_ | ffmpeg 120fps frame renderer</title>
+    <script src="https://cdn.jsdelivr.net/npm/coi-serviceworker@0.1.7/coi-serviceworker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         
@@ -35,14 +37,10 @@
             font-weight: 700;
             letter-spacing: 2px;
             font-size: 1.2rem;
+            text-decoration: none;
         }
 
-        nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
+        .back-btn {
             color: #666;
             text-decoration: none;
             font-size: 0.85rem;
@@ -51,58 +49,17 @@
             transition: color 0.2s;
         }
 
-        nav a:hover, nav a.active {
+        .back-btn:hover {
             color: #fff;
         }
 
-        .btn-socials {
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-radius: 2px;
-        }
-
-        .title-section {
-            margin-bottom: 3rem;
-        }
-
-        .title-section h1 {
-            color: #fff;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .title-section p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-
-        .card {
+        .tool-container {
+            max-width: 600px;
+            margin: 0 auto;
             background: #0a0a0a;
             border: 1px solid #161616;
-            padding: 2.5rem;
+            padding: 3rem;
             border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            transition: border-color 0.3s;
-            min-height: 280px;
-        }
-
-        .card:hover {
-            border-color: #333;
         }
 
         .project-num {
@@ -114,116 +71,137 @@
             text-transform: uppercase;
         }
 
-        .card h2 {
+        h1 {
             color: #fff;
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 600;
             margin-bottom: 1rem;
         }
 
-        .card p {
+        p {
             color: #888;
             font-size: 0.95rem;
             line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .fps-selector {
+            display: flex;
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
-        .tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: auto;
-        }
-
-        .tag {
-            background: #111;
-            border: 1px solid #222;
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.3rem 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .arrow-btn {
-            position: absolute;
-            bottom: 2.5rem;
-            right: 2.5rem;
-            width: 40px;
-            height: 40px;
-            border: 1px solid #222;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .fps-option {
+            flex: 1;
+            background: #050505;
+            border: 1px solid #161616;
             color: #666;
-            text-decoration: none;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .card:hover .arrow-btn {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-        }
-
-        #tk-drop-zone {
-            border: 2px dashed #222;
-            padding: 1.5rem;
+            padding: 0.75rem;
             text-align: center;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .fps-option.active {
+            border-color: #fff;
+            color: #fff;
+            background: #111;
+        }
+
+        .drop-zone {
+            border: 2px dashed #222;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
             background: #050505;
             cursor: pointer;
             color: #666;
-            font-size: 0.8rem;
-            transition: border-color 0.2s;
-        }
-
-        #tk-drop-zone:hover {
-            border-color: #444;
-        }
-
-        .stats-display {
             font-size: 0.85rem;
-            color: #b3b3b3;
-            line-height: 1.6;
-            display: none;
-            background: #050505;
-            padding: 1rem;
-            border-radius: 4px;
-            border: 1px solid #161616;
-            margin-top: 1rem;
+            transition: border-color 0.2s, color 0.2s;
         }
 
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.25rem;
+        .drop-zone:hover {
+            border-color: #444;
+            color: #888;
         }
 
-        .stats-label {
-            color: #666;
-        }
-
-        .stats-value {
-            color: #fff;
+        .btn-action {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1rem;
             font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 2px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            margin-bottom: 1.5rem;
+            display: block;
+            text-align: center;
+            text-decoration: none;
         }
 
-        .status-badge {
-            margin-top: 0.75rem;
-            font-size: 0.75rem;
-            font-weight: 700;
+        .btn-action.ready {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-download {
+            background: #00ff00 !important;
+            color: #000 !important;
+            display: none;
+        }
+
+        #file-status {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .output-box {
+            background: #050505;
+            border: 1px solid #161616;
+            padding: 1.5rem;
+            border-radius: 4px;
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .output-box h3 {
+            color: #fff;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        @media (max-width: 900px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
+        .command-text {
+            font-family: monospace;
+            color: #00ff00;
+            font-size: 0.85rem;
+            background: #000;
+            padding: 0.75rem;
+            border-radius: 2px;
+            word-break: break-all;
+            border: 1px solid #111;
+        }
+
+        @media (max-width: 768px) {
             body {
                 padding: 2rem;
+            }
+            .tool-container {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -231,147 +209,87 @@
 <body>
 
     <header>
-        <div class="logo">N3YFX_</div>
-        <nav>
-            <a href="#" class="active">DOCS</a>
-            <a href="#">EXPERTISE</a>
-            <a href="#">STACK</a>
-            <a href="#">WORK</a>
-            <a href="#">CONTACT</a>
-        </nav>
-        <button class="btn-socials">Socials</button>
+        <a href="../" class="logo">N3YFX_</a>
+        <a href="../" class="back-btn">← back to deploys</a>
     </header>
 
-    <section class="title-section">
-        <h1>Production Deploys</h1>
-        <p>Selected work built for performance.</p>
-    </section>
-
-    <main class="grid-container">
-
-        <div class="card">
-            <div>
-                <div class="project-num">PROJECT_01</div>
-                <h2>FFmpeg 120fps</h2>
-                <p>High-performance video delivery optimization tool for crisp playback. Eliminates social media frame drops entirely.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">FFMPEG</span>
-                <span class="tag">CLI</span>
-            </div>
-            <a href="./120fps/" class="arrow-btn">↗</a>
+    <main class="tool-container">
+        <div class="project-num">engine_core_01</div>
+        <h1>ffmpeg 120fps interpolator</h1>
+        <p>modify how tiktok reads your timing profiles to completely neutralize server compression scales.</p>
+        
+        <div class="fps-selector">
+            <div class="fps-option active" data-fps="60">60 fps base</div>
+            <div class="fps-option" data-fps="120">120 fps base</div>
         </div>
 
-        <div class="card">
-            <div>
-                <div class="project-num">PROJECT_02</div>
-                <h2>TikTok Check</h2>
-                <p>Drop your file to instantly inspect resolution metadata and check if it triggers compression tiers.</p>
-                
-                <div id="tk-drop-zone">
-                    drag & drop clip here or click to browse
-                    <input type="file" id="tk-file-input" accept="video/*" style="display: none;">
-                </div>
-                
-                <div id="tk-results" class="stats-display">
-                    <div class="stats-row"><span class="stats-label">Dimensions:</span><span id="res-val" class="stats-value">-</span></div>
-                    <div class="stats-row"><span class="stats-label">Duration:</span><span id="dur-val" class="stats-value">-</span></div>
-                    <div class="stats-row"><span class="stats-label">File Size:</span><span id="size-val" class="stats-value">-</span></div>
-                    <div class="stats-row"><span class="stats-label">Est. Bitrate:</span><span id="bit-val" class="stats-value">-</span></div>
-                    <div id="tk-status" class="status-badge"></div>
-                </div>
-            </div>
-            <div class="tags">
-                <span class="tag">ANALYTICS</span>
-                <span class="tag">METADATA</span>
-            </div>
+        <div class="drop-zone" id="render-drop-zone">
+            drag & drop target edit file here or click to select
+            <input type="file" id="render-file-input" accept="video/*" style="display: none;">
         </div>
 
-        <div class="card">
-            <div>
-                <div class="project-num">PROJECT_03</div>
-                <h2>Social Hub</h2>
-                <p>Direct entry links to main content feeds, community spaces, and editing portfolios across networks.</p>
-            </div>
-            <div class="tags">
-                <span class="tag">NETWORKS</span>
-                <span class="tag">PORTFOLIO</span>
-            </div>
-            <a href="#" class="arrow-btn">↗</a>
-        </div>
+        <div id="file-status"></div>
+        
+        <button class="btn-action" id="render-btn">Execute Browser Render</button>
+        <a class="btn-action btn-download" id="download-btn" href="#">Download Reprofiled File</a>
 
+        <div class="output-box" id="cmd-output-box">
+            <h3>compiled terminal string</h3>
+            <div class="command-text" id="cmd-string"></div>
+        </div>
     </main>
 
     <script>
-        const tkDropZone = document.getElementById('tk-drop-zone');
-        const tkFileInput = document.getElementById('tk-file-input');
-        const tkResults = document.getElementById('tk-results');
-        const resVal = document.getElementById('res-val');
-        const durVal = document.getElementById('dur-val');
-        const bitVal = document.getElementById('bit-val');
-        const sizeVal = document.getElementById('size-val');
-        const tkStatus = document.getElementById('tk-status');
+        const dropZone = document.getElementById('render-drop-zone');
+        const fileInput = document.getElementById('render-file-input');
+        const renderBtn = document.getElementById('render-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const fileStatus = document.getElementById('file-status');
+        const fpsOptions = document.querySelectorAll('.fps-option');
+        const cmdOutputBox = document.getElementById('cmd-output-box');
+        const cmdString = document.getElementById('cmd-string');
+        
+        let loadedFile = null;
+        let selectedFps = '60';
 
-        tkDropZone.addEventListener('click', () => tkFileInput.click());
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
 
-        tkFileInput.addEventListener('change', (e) => {
-            analyzeTkFile(e.target.files[0]);
+        fpsOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                fpsOptions.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                selectedFps = opt.getAttribute('data-fps');
+                if (loadedFile) updateCommandText();
+            });
         });
 
-        tkDropZone.addEventListener('dragover', (e) => {
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            handleUploadedFile(e.target.files[0]);
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            tkDropZone.style.borderColor = '#fff';
+            dropZone.style.borderColor = '#fff';
         });
 
-        tkDropZone.addEventListener('dragleave', () => {
-            tkDropZone.style.borderColor = '#222';
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#222';
         });
 
-        tkDropZone.addEventListener('drop', (e) => {
+        dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            tkDropZone.style.borderColor = '#222';
-            analyzeTkFile(e.dataTransfer.files[0]);
+            dropZone.style.borderColor = '#222';
+            handleUploadedFile(e.dataTransfer.files[0]);
         });
 
-        function analyzeTkFile(file) {
-            if (!file || !file.type.startsWith('video/')) {
-                alert('Drop a valid video file, bradar.');
-                return;
-            }
-
-            const video = document.createElement('video');
-            video.preload = 'metadata';
-            video.src = URL.createObjectURL(file);
-
-            video.onloadedmetadata = function() {
-                URL.revokeObjectURL(video.src);
-                
-                const width = video.videoWidth;
-                const height = video.videoHeight;
-                const duration = video.duration.toFixed(2);
-                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                const bitrateMbps = ((file.size * 8) / (video.duration * 1024 * 1024)).toFixed(2);
-
-                resVal.textContent = `${width} x ${height}`;
-                durVal.textContent = `${duration}s`;
-                sizeVal.textContent = `${sizeMB} MB`;
-                bitVal.textContent = `${bitrateMbps} Mbps`;
-
-                if (width === 1080 && height === 1920) {
-                    tkStatus.textContent = 'PASSED: PERFECT 1080x1920 TIKTOK RENDER';
-                    tkStatus.style.color = '#00ff00';
-                } else {
-                    tkStatus.textContent = 'WARNING: DIMENSIONS ARE NOT VERTICAL 1080x1920';
-                    tkStatus.style.color = '#ff3333';
-                }
-
-                tkResults.style.display = 'block';
-            };
-            
-            video.onerror = function() {
-                alert('Could not parse video metadata.');
-            };
-        }
-    </script>
-</body>
-</html>
+        function handleUploadedFile(file) {
+            if (file && file.type.startsWith('video/')) {
+                loadedFile = file;
+                fileStatus.textContent = `TARGET ACQUIRED: ${file.name}`;
+                renderBtn.classList.add('ready');
+                cmdOutputBox.style.display = 'none';
+                downloadBtn.style.display = 'none';
+            } else
