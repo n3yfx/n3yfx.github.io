@@ -42,7 +42,13 @@
 
 <script>
     const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: true });
+    
+    // using the single-threaded core so we don't need SharedArrayBuffer
+    const ffmpeg = createFFmpeg({ 
+        log: true,
+        corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
+    });
+
     let loadedFile = null; let selectedFps = '60';
 
     const dropZone = document.getElementById('drop-zone');
@@ -76,4 +82,5 @@
     };
 </script>
 </body>
+</html>
 </html>
