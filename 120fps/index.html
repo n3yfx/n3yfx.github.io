@@ -66,22 +66,36 @@
     };
 
     processBtn.onclick = async () => {
+        // disable button so you stop fecking spamming it
+        processBtn.disabled = true;
+        processBtn.textContent = 'processing...';
+
         consoleLog.textContent = 'status: loading engine...';
         if (!ffmpeg.isLoaded()) await ffmpeg.load();
         
         const file = document.getElementById('file').files[0];
-        if(!file) return consoleLog.textContent = 'error: no file';
+        if(!file) {
+            processBtn.disabled = false;
+            processBtn.textContent = 'process video';
+            return consoleLog.textContent = 'error: no file';
+        }
         
         ffmpeg.FS('writeFile', file.name, await fetchFile(file));
         consoleLog.textContent = 'status: processing...';
         bar.style.width = '50%';
         
-        await ffmpeg.run('-itsscale', fps === '60' ? '2' : '6', '-i', file.name, '-c:v', 'copy', '-c:a', 'copy', 'out.mp4');
-        
-        bar.style.width = '100%';
-        consoleLog.textContent = 'status: done!';
-        const data = ffmpeg.FS('readFile', 'out.mp4');
-        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data.buffer])); a.download = 'output.mp4'; a.click();
+        try {
+            await ffmpeg.run('-itsscale', fps === '60' ? '2' : '6', '-i', file.name, '-c:v', 'copy', '-c:a', 'copy', 'out.mp4');
+            bar.style.width = '100%';
+            consoleLog.textContent = 'status: done!';
+            const data = ffmpeg.FS('readFile', 'out.mp4');
+            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data.buffer])); a.download = 'output.mp4'; a.click();
+        } catch (e) {
+            consoleLog.textContent = 'error: ' + e.message;
+        } finally {
+            processBtn.disabled = false;
+            processBtn.textContent = 'process video';
+        }
     };
 </script>
 </body>
