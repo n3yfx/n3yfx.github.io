@@ -40,7 +40,8 @@ if (typeof window === 'undefined') {
         
         if (isLocalhost || isHttps) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register(window.document.currentScript.src).then(
+                // hardcoded the name so it stops fecking breaking, alr?
+                navigator.serviceWorker.register('coi-serviceworker.js').then(
                     (registration) => {
                         console.log('coi-worker registered', registration.scope);
                         if (registration.active && !navigator.serviceWorker.controller) {
