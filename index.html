@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n3yfx_ | Production Deploys</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #050505;
+            color: #b3b3b3;
+            font-family: 'Inter', sans-serif;
+            padding: 3rem 5rem;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #141414;
+            padding-bottom: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: #fff;
+        }
+
+        .btn-socials {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .title-section {
+            margin-bottom: 3rem;
+        }
+
+        .title-section h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-section p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .card {
+            background: #0a0a0a;
+            border: 1px solid #161616;
+            padding: 2.5rem;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: border-color 0.3s;
+            min-height: 280px;
+        }
+
+        .card:hover {
+            border-color: #333;
+        }
+
+        .project-num {
+            font-size: 0.7rem;
+            color: #444;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .card h2 {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: #888;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .card ul li {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card ul li::before {
+            content: "•";
+            color: #444;
+            margin-right: 8px;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #111;
+            border: 1px solid #222;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.3rem 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .arrow-btn {
+            position: absolute;
+            bottom: 2.5rem;
+            right: 2.5rem;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .card:hover .arrow-btn {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">N3YFX_</div>
+        <nav>
+            <a href="#" class="active">DOCS</a>
+            <a href="#">EXPERTISE</a>
+            <a href="#">STACK</a>
+            <a href="#">WORK</a>
+            <a href="#">CONTACT</a>
+        </nav>
+        <button class="btn-socials">Socials</button>
+    </header>
+
+    <section class="title-section">
+        <h1>Production Deploys</h1>
+        <p>Selected work built for performance.</p>
+    </section>
+
+    <main class="grid-container">
+
+        <!-- Card 1 -->
+        <div class="card">
+            <div>
+                <div class="project-num">PROJECT_01</div>
+                <h2>FFmpeg 120fps</h2>
+                <p>High-performance video delivery optimization tool for crisp playback. Eliminates social media frame drops entirely.</p>
+                <ul>
+                    <li>Optimized for flawless 1080p 60/120fps outputs</li>
+                    <li>Custom command-line matrix patch scripting</li>
+                </ul>
+            </div>
+            <div class="tags">
+                <span class="tag">FFMPEG</span>
+                <span class="tag">CLI</span>
+            </div>
+            <a href="#" class="arrow-btn">↗</a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card">
+            <div>
+                <div class="project-num">PROJECT_02</div>
+                <h2>Glow Method</h2>
+                <p>Advanced rendering setup designed to bypass platform compression tiers. Maintains absolute source quality after upload.</p>
+                <ul>
+                    <li>Custom encoding bitrate configurations</li>
+                    <li>Zero detail loss across multiple uploads</li>
+                </ul>
+            </div>
+            <div class="tags">
+                <span class="tag">ENCODING</span>
+                <span class="tag">QUALITY</span>
+            </div>
+            <a href="#" class="arrow-btn">↗</a>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+            <div>
+                <div class="project-num">PROJECT_03</div>
+                <h2>TikTok Check</h2>
+                <p>Advanced analytics layout tracker that monitors delivery flags. Uncovers underlying bitrate bottlenecks on mobile devices.</p>
+                <ul>
+                    <li>Real-time metadata verification</li>
+                    <li>Identifies platform compression tier triggers</li>
+                </ul>
+            </div>
+            <div class="tags">
+                <span class="tag">ANALYTICS</span>
+                <span class="tag">METADATA</span>
+            </div>
+            <a href="#" class="arrow-btn">↗</a>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card">
+            <div>
+                <div class="project-num">PROJECT_04</div>
+                <h2>Social Hub</h2>
+                <p>Direct entry links to main content feeds, community spaces, and editing portfolios across networks.</p>
+                <ul>
+                    <li>Unified high-speed traffic routing</li>
+                    <li>Instant connection to active channels</li>
+                </ul>
+            </div>
+            <div class="tags">
+                <span class="tag">NETWORKS</span>
+                <span class="tag">PORTFOLIO</span>
+            </div>
+            <a href="#" class="arrow-btn">↗</a>
+        </div>
+
+    </main>
+
+</body>
+</html>
