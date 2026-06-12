@@ -6,287 +6,66 @@
     <title>N3YFX_ | FFmpeg 120fps</title>
     <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #050505;
-            color: #b3b3b3;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            background: #0a0a0a;
-            border: 1px solid #161616;
-            padding: 3rem;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .meta {
-            font-size: 0.7rem;
-            color: #444;
-            letter-spacing: 2px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        h1 {
-            color: #fff;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: -0.5px;
-        }
-
-        .desc {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .fps-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .fps-btn {
-            flex: 1;
-            background: #050505;
-            border: 1px solid #222;
-            color: #666;
-            padding: 0.75rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .fps-btn.active {
-            border-color: #fff;
-            color: #fff;
-        }
-
-        .drop-zone {
-            border: 2px dashed #222;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-            background: #050505;
-            cursor: pointer;
-            color: #555;
-            font-size: 0.85rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .drop-zone:hover {
-            border-color: #444;
-            color: #aaa;
-        }
-
-        .target-status {
-            font-size: 0.75rem;
-            color: #fff;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
-            display: none;
-        }
-
-        .process-btn {
-            width: 100%;
-            background: #fff;
-            color: #000;
-            border: none;
-            padding: 1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-bottom: 2rem;
-            transition: opacity 0.2s;
-        }
-
-        .process-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .console-box {
-            background: #050505;
-            border: 1px solid #161616;
-            padding: 1.25rem;
-            border-radius: 4px;
-        }
-
-        .console-title {
-            font-size: 0.7rem;
-            color: #444;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-            letter-spacing: 1px;
-        }
-
-        .console-log {
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: #00ff00;
-            word-break: break-all;
-            line-height: 1.5;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #050505; color: #b3b3b3; font-family: 'Inter', sans-serif; padding: 2rem; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #141414; padding-bottom: 1.5rem; margin-bottom: 4rem; max-width: 1100px; margin-left: auto; margin-right: auto; }
+        .logo { color: #ffffff; font-weight: 700; text-decoration: none; letter-spacing: 2px; }
+        nav a { color: #666; text-decoration: none; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; margin-left: 2rem; }
+        .container { background: #0a0a0a; border: 1px solid #161616; padding: 3rem; border-radius: 8px; max-width: 600px; margin: 0 auto; }
+        h1 { color: #fff; font-size: 1.5rem; margin-bottom: 1rem; }
+        .fps-selector { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .fps-btn { flex: 1; background: #050505; border: 1px solid #222; color: #666; padding: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .fps-btn.active { border-color: #fff; color: #fff; }
+        .drop-zone { border: 2px dashed #222; padding: 2rem; text-align: center; cursor: pointer; margin-bottom: 1.5rem; border-radius: 4px; }
+        .process-btn { width: 100%; background: #fff; color: #000; padding: 1rem; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; border-radius: 4px; }
+        .console-log { font-family: monospace; font-size: 0.8rem; color: #00ff00; margin-top: 1rem; word-break: break-all; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="meta">Engine_Core_01</div>
-        <h1>ffmpeg 120fps interpolator</h1>
-        <div class="desc">modify how tiktok reads your timing profiles to completely neutralize server compression scales.</div>
+<header>
+    <a href="../" class="logo">N3YFX_</a>
+    <nav><a href="../">Hub</a></nav>
+</header>
 
-        <div class="fps-selector">
-            <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
-            <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
-        </div>
-
-        <div class="drop-zone" id="drop-zone">
-            drag & drop target edit file here or click to select
-            <input type="file" id="file-input" accept="video/*" style="display: none;">
-        </div>
-
-        <div class="target-status" id="target-status"></div>
-
-        <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
-
-        <div class="console-box">
-            <div class="console-title">Generated Terminal Command</div>
-            <div class="console-log" id="console-log">awaiting asset upload initialization...</div>
-        </div>
+<div class="container">
+    <h1>ffmpeg 120fps interpolator</h1>
+    <div class="fps-selector">
+        <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
+        <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
     </div>
+    <div class="drop-zone" id="drop-zone">drag & drop target edit here<input type="file" id="file-input" accept="video/*" style="display: none;"></div>
+    <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
+    <div class="console-log" id="console-log">awaiting asset upload...</div>
+</div>
 
-    <script>
-        const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: true });
+<script>
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
+    let loadedFile = null; let selectedFps = '60';
 
-        let loadedFile = null;
-        let selectedFps = '60';
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const renderBtn = document.getElementById('render-btn');
+    const consoleLog = document.getElementById('console-log');
 
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const targetStatus = document.getElementById('target-status');
-        const renderBtn = document.getElementById('render-btn');
-        const consoleLog = document.getElementById('console-log');
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => { loadedFile = e.target.files[0]; renderBtn.disabled = false; consoleLog.textContent = `Target: ${loadedFile.name}`; };
+    
+    function setFps(fps) { selectedFps = fps; document.querySelectorAll('.fps-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(fps))); }
 
-        // handle logs straight from the webassembly thread
-        ffmpeg.setLogger(({ type, message }) => {
-            consoleLog.textContent = `[ffmpeg.${type}] ${message}`;
-        });
-
-        dropZone.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', (e) => {
-            handleFile(e.target.files[0]);
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#fff';
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#222';
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.style.borderColor = '#222';
-            handleFile(e.dataTransfer.files[0]);
-        });
-
-        function handleFile(file) {
-            if (!file) return;
-            loadedFile = file;
-            targetStatus.textContent = `TARGET ACQUIRED: ${file.name.toUpperCase()}`;
-            targetStatus.style.display = 'block';
-            renderBtn.removeAttribute('disabled');
-            updateCommandPreview();
-        }
-
-        function setFps(fps) {
-            selectedFps = fps;
-            document.querySelectorAll('.fps-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.includes(fps));
-            });
-            updateCommandPreview();
-        }
-
-        function updateCommandPreview() {
-            if (!loadedFile) return;
-            const scale = selectedFps === '60' ? '2' : '6';
-            consoleLog.textContent = `ffmpeg -itsscale ${scale} -i ${loadedFile.name} -c:v copy -c:a copy output.mp4`;
-        }
-
-        renderBtn.addEventListener('click', async () => {
-            if (!loadedFile) return;
-
-            renderBtn.setAttribute('disabled', 'true');
-            renderBtn.textContent = 'initializing core...';
-
-            try {
-                if (!ffmpeg.isLoaded()) {
-                    await ffmpeg.load();
-                }
-
-                renderBtn.textContent = 'mounting storage...';
-                ffmpeg.FS('writeFile', loadedFile.name, await fetchFile(loadedFile));
-
-                const scale = selectedFps === '60' ? '2' : '6';
-                renderBtn.textContent = 'compiling frame vector scales...';
-
-                // execute actual webassembly command context
-                await ffmpeg.run('-itsscale', scale, '-i', loadedFile.name, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
-
-                renderBtn.textContent = 'extracting pipeline binary...';
-                const data = ffmpeg.FS('readFile', 'output.mp4');
-
-                // deploy download interface
-                const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `optimized_${selectedFps}fps_${loadedFile.name}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-
-                renderBtn.textContent = 'sequence generated';
-                consoleLog.textContent = 'process finished successfully. pipeline clear.';
-            } catch (err) {
-                console.error(err);
-                consoleLog.textContent = `error: ${err.message}`;
-                renderBtn.textContent = 'pipeline failed';
-            } finally {
-                renderBtn.removeAttribute('disabled');
-            }
-        });
-    </script>
+    renderBtn.onclick = async () => {
+        renderBtn.disabled = true; renderBtn.textContent = 'processing...';
+        if (!ffmpeg.isLoaded()) await ffmpeg.load();
+        ffmpeg.FS('writeFile', loadedFile.name, await fetchFile(loadedFile));
+        const scale = selectedFps === '60' ? '2' : '6';
+        await ffmpeg.run('-itsscale', scale, '-i', loadedFile.name, '-c:v', 'copy', '-c:a', 'copy', 'output.mp4');
+        const data = ffmpeg.FS('readFile', 'output.mp4');
+        const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+        const a = document.createElement('a'); a.href = url; a.download = `optimized_${loadedFile.name}`; a.click();
+        renderBtn.textContent = 'done';
+    };
+</script>
 </body>
 </html>
