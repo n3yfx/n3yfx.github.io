@@ -39,8 +39,8 @@
 <script>
     const { createFFmpeg, fetchFile } = FFmpeg;
     
-    // THIS IS THE FIX. Force single-threaded core. 
-    // This ignores SharedArrayBuffer requirements and stops the proxy_main crash.
+    // THIS IS THE FECKING FIX. 
+    // Force single-threaded core. This bypasses the SharedArrayBuffer requirement.
     const ffmpeg = createFFmpeg({ 
         log: true,
         corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
@@ -66,7 +66,7 @@
     };
 
     processBtn.onclick = async () => {
-        consoleLog.textContent = 'status: loading engine (this may take a moment)...';
+        consoleLog.textContent = 'status: loading engine...';
         if (!ffmpeg.isLoaded()) await ffmpeg.load();
         
         const file = document.getElementById('file').files[0];
@@ -76,7 +76,6 @@
         consoleLog.textContent = 'status: processing...';
         bar.style.width = '50%';
         
-        // Single threaded execution
         await ffmpeg.run('-itsscale', fps === '60' ? '2' : '6', '-i', file.name, '-c:v', 'copy', '-c:a', 'copy', 'out.mp4');
         
         bar.style.width = '100%';
