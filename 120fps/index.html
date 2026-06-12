@@ -32,8 +32,8 @@
 <div class="container">
     <h1>ffmpeg 120fps interpolator</h1>
     <div class="fps-selector">
-        <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
-        <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
+        <button class="fps-btn active" id="btn-60" onclick="setFps('60')">60 fps base</button>
+        <button class="fps-btn" id="btn-120" onclick="setFps('120')">120 fps base</button>
     </div>
     <div class="drop-zone" id="drop-zone">drag & drop target edit here<input type="file" id="file-input" accept="video/*" style="display: none;"></div>
     <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
@@ -50,10 +50,18 @@
     const renderBtn = document.getElementById('render-btn');
     const consoleLog = document.getElementById('console-log');
 
+    function setFps(fps) { 
+        selectedFps = fps; 
+        document.getElementById('btn-60').classList.toggle('active', fps === '60');
+        document.getElementById('btn-120').classList.toggle('active', fps === '120');
+    }
+
     dropZone.onclick = () => fileInput.click();
-    fileInput.onchange = (e) => { loadedFile = e.target.files[0]; renderBtn.disabled = false; consoleLog.textContent = `Target: ${loadedFile.name}`; };
-    
-    function setFps(fps) { selectedFps = fps; document.querySelectorAll('.fps-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(fps))); }
+    fileInput.onchange = (e) => { 
+        loadedFile = e.target.files[0]; 
+        renderBtn.disabled = false; 
+        consoleLog.textContent = `Target: ${loadedFile.name}`; 
+    };
 
     renderBtn.onclick = async () => {
         renderBtn.disabled = true; renderBtn.textContent = 'processing...';
