@@ -1,37 +1,73 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>fecking ffmpeg test</title>
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
-  </head>
-  <body>
-    <h1>upload a fecking video</h1>
-    <input type="file" id="uploader">
-    
-    <script>
-      const { createFFmpeg, fetchFile } = FFmpeg;
-      
-      const ffmpeg = createFFmpeg({ 
-        log: true,
-        corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
-      });
+<html lang="en">
+<head>
+    <style>
+        body { background: #0c0c0c; color: #fff; font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        .wrapper { width: 400px; }
+        .header { margin-bottom: 20px; }
+        .engine { font-size: 0.7rem; color: #555; }
+        h1 { font-size: 1.5rem; margin: 5px 0; }
+        .drop-zone { border: 2px dashed #333; padding: 40px; text-align: center; cursor: pointer; color: #666; margin-bottom: 20px; }
+        .target-label { color: #fff; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        button { width: 100%; padding: 15px; background: #fff; border: none; cursor: pointer; font-weight: bold; }
+        button:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .cmd-box { border: 1px solid #333; padding: 15px; margin-top: 20px; background: #111; color: #0f0; font-family: monospace; }
+    </style>
+</head>
+<body>
 
-      document.getElementById('uploader').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        console.log('loading the fecking ffmpeg...');
+<div class="wrapper">
+    <div class="header">
+        <div class="engine">ENGINE_CORE_01</div>
+        <h1>ffmpeg 120fps interpolator</h1>
+        <p>modify how tiktok reads your timing profiles to completely neutralize server compression scales.</p>
+    </div>
+
+    <!-- fecking drag and drop zone -->
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        drag & drop target edit file here or click to select
+    </div>
+    <input type="file" id="fileInput" hidden>
+
+    <!-- fecking target label -->
+    <div class="target-label" id="targetLabel"></div>
+
+    <!-- fecking generate button -->
+    <button id="genBtn">GENERATE TERMINAL SEQUENCE</button>
+
+    <!-- fecking terminal output -->
+    <div class="cmd-box" id="cmdBox" style="display:none;">
+        GENERATED TERMINAL COMMAND
+        <p id="cmdText"></p>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const targetLabel = document.getElementById('targetLabel');
+    const genBtn = document.getElementById('genBtn');
+    const cmdBox = document.getElementById('cmdBox');
+    const cmdText = document.getElementById('cmdText');
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            // fecking update the target label
+            targetLabel.innerText = "TARGET ACQUIRED: " + e.target.files[0].name;
+        }
+    });
+
+    genBtn.addEventListener('click', () => {
+        if (!fileInput.files[0]) return;
         
-        await ffmpeg.load();
+        // fecking disable button after one click
+        genBtn.disabled = true;
         
-        console.log('writing fecking file...');
-        ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(file));
-        
-        console.log('starting fecking transcode...');
-        await ffmpeg.run('-i', 'input.mp4', 'output.webm');
-        
-        console.log('fecking done!');
-        const data = ffmpeg.FS('readFile', 'output.webm');
-        console.log('output file ready:', data);
-      });
-    </script>
-  </body>
+        // fecking generate command
+        const fileName = fileInput.files[0].name;
+        cmdText.innerText = `ffmpeg -itsscale 2 -i ${fileName} -c:v copy -c:a copy output.mp4`;
+        cmdBox.style.display = 'block';
+    });
+</script>
+
+</body>
 </html>
