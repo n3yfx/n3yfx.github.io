@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="coi-serviceworker.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N3YFX_ | Hub</title>
+    <title>N3YFX_ | FFmpeg 120fps</title>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -12,436 +12,231 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            scroll-behavior: smooth;
         }
 
         body {
             background-color: #050505;
             color: #b3b3b3;
             font-family: 'Inter', sans-serif;
-            padding: 2rem 5rem;
-            min-height: 100vh;
-        }
-
-        header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            border-bottom: 1px solid #141414;
-            padding-bottom: 1.5rem;
-            margin-bottom: 4rem;
-            position: sticky;
-            top: 0;
-            background-color: rgba(5, 5, 5, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 100;
+            min-height: 100vh;
+            padding: 2rem;
         }
 
-        .logo {
-            color: #ffffff;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-
-        nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: #fff;
-        }
-
-        .section-container {
-            max-width: 1100px;
-            margin: 0 auto 6rem auto;
-        }
-
-        h2 {
-            color: #fff;
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            color: #555;
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
-        }
-
-        /* About Block Style */
-        .about-box {
+        .container {
             background: #0a0a0a;
             border: 1px solid #161616;
             padding: 3rem;
-            border-radius: 6px;
-            line-height: 1.8;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
         }
 
-        .about-box p {
-            color: #ccc;
-            font-size: 1.1rem;
-            font-weight: 400;
-        }
-
-        /* Work Grid Styles */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: #0a0a0a;
-            border: 1px solid #161616;
-            padding: 2.5rem;
-            border-radius: 6px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            transition: border-color 0.2s;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .card:hover {
-            border-color: #333;
-        }
-
-        .project-meta {
+        .meta {
             font-size: 0.7rem;
             color: #444;
             letter-spacing: 2px;
             font-weight: 700;
-            margin-bottom: 0.5rem;
             text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
 
-        .card h3 {
+        h1 {
             color: #fff;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             font-weight: 600;
             margin-bottom: 1rem;
+            letter-spacing: -0.5px;
         }
 
-        .card p {
-            color: #888;
-            font-size: 0.95rem;
+        .desc {
+            color: #666;
+            font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 2rem;
         }
 
-        .tags {
+        .fps-selector {
             display: flex;
-            gap: 0.5rem;
-            margin-top: auto;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .tag {
-            background: #111;
-            border: 1px solid #1c1c1c;
-            color: #888;
-            font-size: 0.7rem;
-            font-family: monospace;
-            padding: 0.25rem 0.5rem;
-            border-radius: 2px;
-            font-weight: 700;
+        .fps-btn {
+            flex: 1;
+            background: #050505;
+            border: 1px solid #222;
+            color: #666;
+            padding: 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
         }
 
-        .arrow-icon {
-            position: absolute;
-            bottom: 2.5rem;
-            right: 2.5rem;
-            color: #333;
-            transition: color 0.2s;
-        }
-
-        .card:hover .arrow-icon {
+        .fps-btn.active {
+            border-color: #fff;
             color: #fff;
         }
 
-        /* TikTok Drop Zone Tooling Styles */
-        #tk-drop-zone {
+        .drop-zone {
             border: 2px dashed #222;
-            padding: 2rem 1.5rem;
+            padding: 2.5rem 1.5rem;
             text-align: center;
-            margin-bottom: 1.5rem;
             background: #050505;
             cursor: pointer;
-            color: #666;
+            color: #555;
             font-size: 0.85rem;
-            transition: border-color 0.2s, color 0.2s;
             border-radius: 4px;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
         }
 
-        #tk-drop-zone:hover {
+        .drop-zone:hover {
             border-color: #444;
             color: #aaa;
         }
 
-        .stats-display {
-            font-size: 0.85rem;
-            color: #b3b3b3;
-            line-height: 1.6;
+        .target-status {
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
             display: none;
+        }
+
+        .process-btn {
+            width: 100%;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            transition: opacity 0.2s;
+        }
+
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .console-box {
             background: #050505;
+            border: 1px solid #161616;
             padding: 1.25rem;
             border-radius: 4px;
-            border: 1px solid #161616;
-            margin-bottom: 1rem;
         }
 
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.4rem;
-        }
-
-        .stats-label {
-            color: #666;
-        }
-
-        .stats-value {
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .status-badge {
-            margin-top: 0.75rem;
-            font-size: 0.75rem;
+        .console-title {
+            font-size: 0.7rem;
+            color: #444;
             font-weight: 700;
-            letter-spacing: 1px;
             text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
         }
 
-        /* Socials Block Style */
-        .socials-box {
-            background: #0a0a0a;
-            border: 1px solid #161616;
-            padding: 3rem;
-            border-radius: 6px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            color: #aaa;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.2s;
-            background: #050505;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            border: 1px solid #161616;
-        }
-
-        .social-link:hover {
-            color: #fff;
-            border-color: #444;
-            background: #111;
-        }
-
-        .social-link svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 2rem;
-            }
-            header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .about-box, .socials-box {
-                padding: 1.5rem;
-            }
+        .console-log {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #00ff00;
+            word-break: break-all;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">N3YFX_</a>
-        <nav>
-            <a href="#about">About</a>
-            <a href="#work">Work</a>
-            <a href="#socials">Socials</a>
-        </nav>
-    </header>
+    <div class="container">
+        <div class="meta">Engine_Core_01</div>
+        <h1>ffmpeg 120fps interpolator</h1>
+        <div class="desc">modify how tiktok reads your timing profiles to completely neutralize server compression scales.</div>
 
-    <main>
-        <section id="about" class="section-container">
-            <h2>About</h2>
-            <div class="about-box">
-                <p>Welcome to the production matrix. This is the hub of popular tiktok editor n3yfx__ where optimization meets design. This site includes all his socials and public work so you can access rendering frameworks directly. Its all 100% free for the community and this gets regular updates to keep ahead of algorithmic compressions. He would appreciate a follow across channels to help support future pipeline deploys.</p>
-            </div>
-        </section>
+        <div class="fps-selector">
+            <button class="fps-btn active" onclick="setFps('60')">60 fps base</button>
+            <button class="fps-btn" onclick="setFps('120')">120 fps base</button>
+        </div>
 
-        <section id="work" class="section-container">
-            <h2>Production Deploys</h2>
-            <div class="subtitle">Selected work built for performance.</div>
-            
-            <div class="grid">
-                <a href="./120fps/" class="card">
-                    <div>
-                        <div class="project-meta">Project_01</div>
-                        <h3>FFmpeg 120fps</h3>
-                        <p>High-performance video delivery optimization tool for crisp playback. Eliminates social media frame drops entirely.</p>
-                    </div>
-                    <div>
-                        <div class="tags">
-                            <span class="tag">FFMPEG</span>
-                            <span class="tag">CLI</span>
-                        </div>
-                        <div class="arrow-icon">↗</div>
-                    </div>
-                </a>
+        <div class="drop-zone" id="drop-zone">
+            drag & drop target edit file here or click to select
+            <input type="file" id="file-input" accept="video/*" style="display: none;">
+        </div>
 
-                <div class="card">
-                    <div>
-                        <div class="project-meta">Project_02</div>
-                        <h3>TikTok Dimensions Checker</h3>
-                        <p style="margin-bottom: 1rem;">Drop your file to instantly inspect resolution metadata and check if it triggers compression tiers.</p>
-                        
-                        <div id="tk-drop-zone">
-                            drag & drop clip here or click to browse
-                            <input type="file" id="tk-file-input" accept="video/*" style="display: none;">
-                        </div>
-                        
-                        <div id="tk-results" class="stats-display">
-                            <div class="stats-row"><span class="stats-label">Dimensions:</span><span id="res-val" class="stats-value">-</span></div>
-                            <div class="stats-row"><span class="stats-label">Duration:</span><span id="dur-val" class="stats-value">-</span></div>
-                            <div class="stats-row"><span class="stats-label">File Size:</span><span id="size-val" class="stats-value">-</span></div>
-                            <div class="stats-row"><span class="stats-label">Est. Bitrate:</span><span id="bit-val" class="stats-value">-</span></div>
-                            <div id="tk-status" class="status-badge"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="tags">
-                            <span class="tag">ANALYTICS</span>
-                            <span class="tag">METADATA</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="target-status" id="target-status"></div>
 
-        <section id="socials" class="section-container">
-            <h2>Socials</h2>
-            <div class="subtitle">Connect and follow across channels.</div>
-            <div class="socials-box">
-                <a href="https://www.tiktok.com/@n3yfx__" target="_blank" class="social-link">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.03 1.6 4.17 1.22 1.32 2.94 2.05 4.74 2.16v3.83c-1.39-.07-2.74-.53-3.89-1.32-.76-.53-1.4-1.23-1.88-2.03v7.35c.1 4.54-3.41 8.51-7.96 8.81-4.82.44-9.11-3.14-9.35-7.97-.28-4.75 3.33-8.91 8.07-9.36.43-.04.86-.05 1.29-.02v3.91c-2.31-.05-4.4 1.52-4.87 3.79-.62 2.76 1.15 5.49 3.92 6.11 2.75.63 5.48-1.15 6.11-3.92.11-.47.14-.96.11-1.44V0h.21z"/></svg>
-                    TikTok
-                </a>
+        <button class="process-btn" id="render-btn" disabled>Generate Terminal Sequence</button>
 
-                <a href="https://discord.gg/FtYqHmNngc" target="_blank" class="social-link">
-                    <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.84-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,80.73,80.73,0,0,0,6.83,11.15,105.52,105.52,0,0,0,32-16.29C129.66,48.59,123.47,25.79,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.94,46,53.72,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.18,46,96,53,91,65.69,84.69,65.69Z"/></svg>
-                    Discord Server
-                </a>
-
-                <a href="https://t.me/n3yfx" target="_blank" class="social-link">
-                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.46c.536-.196 1.006.128.832.941z"/></svg>
-                    Telegram Channel
-                </a>
-            </div>
-        </section>
-    </main>
+        <div class="console-box">
+            <div class="console-title">Generated Terminal Command</div>
+            <div class="console-log" id="console-log">awaiting asset upload initialization...</div>
+        </div>
+    </div>
 
     <script>
-        // TikTok Dimensions Checker Business Logic
-        const tkDropZone = document.getElementById('tk-drop-zone');
-        const tkFileInput = document.getElementById('tk-file-input');
-        const tkResults = document.getElementById('tk-results');
-        const resVal = document.getElementById('res-val');
-        const durVal = document.getElementById('dur-val');
-        const bitVal = document.getElementById('bit-val');
-        const sizeVal = document.getElementById('size-val');
-        const tkStatus = document.getElementById('tk-status');
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
 
-        tkDropZone.addEventListener('click', () => tkFileInput.click());
+        let loadedFile = null;
+        let selectedFps = '60';
 
-        tkFileInput.addEventListener('change', (e) => {
-            analyzeTkFile(e.target.files[0]);
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const targetStatus = document.getElementById('target-status');
+        const renderBtn = document.getElementById('render-btn');
+        const consoleLog = document.getElementById('console-log');
+
+        // handle logs straight from the webassembly thread
+        ffmpeg.setLogger(({ type, message }) => {
+            consoleLog.textContent = `[ffmpeg.${type}] ${message}`;
         });
 
-        tkDropZone.addEventListener('dragover', (e) => {
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            tkDropZone.style.borderColor = '#fff';
+            dropZone.style.borderColor = '#fff';
         });
 
-        tkDropZone.addEventListener('dragleave', () => {
-            tkDropZone.style.borderColor = '#222';
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#222';
         });
 
-        tkDropZone.addEventListener('drop', (e) => {
+        dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            tkDropZone.style.borderColor = '#222';
-            analyzeTkFile(e.dataTransfer.files[0]);
+            dropZone.style.borderColor = '#222';
+            handleFile(e.dataTransfer.files[0]);
         });
 
-        function analyzeTkFile(file) {
-            if (!file || !file.type.startsWith('video/')) {
-                alert('Drop a valid video file, bradar.');
-                return;
-            }
-
-            const video = document.createElement('video');
-            video.preload = 'metadata';
-            video.src = URL.createObjectURL(file);
-
-            video.onloadedmetadata = function() {
-                URL.revokeObjectURL(video.src);
-                
-                const width = video.videoWidth;
-                const height = video.videoHeight;
-                const duration = video.duration.toFixed(2);
-                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                const bitrateMbps = ((file.size * 8) / (video.duration * 1024 * 1024)).toFixed(2);
-
-                resVal.textContent = `${width} x ${height}`;
-                durVal.textContent = `${duration}s`;
-                sizeVal.textContent = `${sizeMB} MB`;
-                bitVal.textContent = `${bitrateMbps} Mbps`;
-
-                if (width === 1080 && height === 1920) {
-                    tkStatus.textContent = 'PASSED: PERFECT 1080x1920 TIKTOK RENDER';
-                    tkStatus.style.color = '#00ff00';
-                } else {
-                    tkStatus.textContent = 'WARNING: DIMENSIONS ARE NOT VERTICAL 1080x1920';
-                    tkStatus.style.color = '#ff3333';
-                }
-
-                tkResults.style.display = 'block';
-            };
-            
-            video.onerror = function() {
-                alert('Could not parse video metadata.');
-            };
+        function handleFile(file) {
+            if (!file) return;
+            loadedFile = file;
+            targetStatus.textContent = `TARGET ACQUIRED: ${file.name.toUpperCase()}`;
+            targetStatus.style.display = 'block';
+            renderBtn.removeAttribute('disabled');
+            updateCommandPreview();
         }
-    </script>
-</body>
-</html>
+
+        function setFps(fps) {
+            selectedFps = fps;
+            document.querySelectorAll('.fps-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.includes(fps));
+            });
+            updateCommandPreview();
+        }
+
+        function update
