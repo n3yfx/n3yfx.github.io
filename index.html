@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <title>N3YFX_</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050505; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         header { position: fixed; top: 0; width: 100%; padding: 2rem; display: flex; justify-content: flex-end; gap: 2rem; background: rgba(5,5,5,0.9); z-index: 100; }
         header a { color: #666; text-decoration: none; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; transition: color 0.3s; }
         header a.active { color: #fff; }
-        section { min-height: 100vh; padding: 100px 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 800px; margin: 0 auto; }
-        h1 { font-size: 2rem; margin-bottom: 2rem; }
-        p { color: #888; line-height: 1.6; text-align: center; }
-        .project-grid { display: grid; gap: 20px; width: 100%; }
-        .card { background: #111; padding: 2rem; border: 1px solid #222; border-radius: 8px; }
+        section { min-height: 100vh; padding: 150px 2rem; display: flex; flex-direction: column; align-items: center; max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin-bottom: 3rem; letter-spacing: 1px; }
+        p { color: #888; line-height: 1.6; text-align: center; max-width: 600px; }
+        
+        .work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
+        .card { background: #0a0a0a; padding: 2rem; border: 1px solid #161616; border-radius: 8px; }
+        .card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .card p { font-size: 0.8rem; text-align: left; margin-bottom: 1rem; }
+        .card a { color: #fff; text-decoration: none; font-size: 0.8rem; border-bottom: 1px solid #fff; }
+
+        .social-grid { display: flex; gap: 2rem; }
+        .social-grid a { color: #666; text-decoration: none; font-weight: 600; }
+        .social-grid a:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -32,11 +40,11 @@
 
 <section id="work">
     <h1>Engine Deployments</h1>
-    <div class="project-grid">
+    <div class="work-grid">
         <div class="card">
             <h3>FFmpeg 120fps</h3>
-            <p>High-performance video delivery optimization tool.</p>
-            <a href="120fps/" style="color:#fff;">Launch Interpolator Vector ↗</a>
+            <p>High-performance video delivery optimization tool. Eliminates social media frame drops entirely.</p>
+            <a href="120fps/">Launch Interpolator Vector ↗</a>
         </div>
         <div class="card">
             <h3>TikTok Check</h3>
@@ -47,7 +55,11 @@
 
 <section id="socials">
     <h1>Socials</h1>
-    <p>Nothing here yet, bradar.</p>
+    <div class="social-grid">
+        <a href="https://t.me/n3yfx" target="_blank">Telegram</a>
+        <a href="https://www.tiktok.com/@n3yfx__" target="_blank">TikTok</a>
+        <a href="https://discord.gg/FtYqHmNngc" target="_blank">Discord</a>
+    </div>
 </section>
 
 <script>
